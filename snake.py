@@ -1,5 +1,12 @@
+'''
+Henry Quillin 
+Snake Game using Turtle 
+11/22/2020
+'''
+
 import turtle
 import random 
+
 
 up = False
 down = False
@@ -96,26 +103,19 @@ draw_apple()
 def gameplay():
     global keep_playing 
     while keep_playing == True:
-        global up, down, left, right
-        if up == True:
-            y = head.ycor()
-            y += 5
-            head.sety(y)
-        if down == True:
-            y = head.ycor()
-            y -= 5
-            head.sety(y)
-        if left == True:
-            x = head.xcor()
-            x -= 5
-            head.setx(x)
-        if right == True:
-            x = head.xcor()
-            x += 5
-            head.setx(x)
         check_boundaries()
         eat_apple(apple)
         window.update()
+        global up, down, left, right
+        if up == True:
+            head.sety(head.ycor() + 3)
+        if down == True:
+            head.sety(head.ycor() - 3)
+        if left == True:
+            head.setx(head.xcor() - 3)
+        if right == True:
+            head.setx(head.xcor() + 3)
+
 gameplay()
 turtle.done()
 
