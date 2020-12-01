@@ -7,13 +7,13 @@ Snake Game using Turtle
 import turtle
 import random 
 
-
 up = False
 down = False
 left = False
 right = False
 keep_playing = True 
 apple = turtle.Turtle()
+snake_body = []
 
 # Create screen
 window = turtle.Screen()
@@ -29,6 +29,7 @@ head.shape("square")
 head.color("#FF00FF")
 head.penup()
 head.goto(0, 0)
+head.direction = 'stop'
 
 # Draw apple 
 def draw_apple(): 
@@ -39,35 +40,30 @@ def draw_apple():
     ran_x = random.randrange(- 240 , 240 , 10 ) 
     ran_y = random.randrange(- 240 , 240 , 10 ) 
     apple.setpos(ran_x , ran_y)
+    apple.speed(0)
+    grow_snake()
+    #code to add to snake body 
+
+def grow_snake():
+    new_segment = turtle.Turtle()
+    new_segment.speed = 0
+    new_segment.shape = 'square'
+    new_segment.color("#FF00FF")
+    new_segment.penup()
+    snake_body.append(new_segment)
 
 def head_up():
-    global up, down, left, right
-    up = True
-    down = False
-    left = False
-    right = False 
+    head.direction = 'up'
 
 def head_down():
-    global up, down, left, right
-    up = False
-    down = True
-    left = False
-    right = False 
+    head.direction = 'down'
 
 def head_left():
-    global up, down, left, right
-    up = False
-    down = False
-    left = True
-    right = False 
+    head.direction = 'left'
 
 
 def head_right():
-    global up, down, left, right
-    up = False
-    down = False
-    left = False
-    right = True 
+    head.direction = 'right'
 
 def close():
     exit()
@@ -96,7 +92,7 @@ def check_boundaries():
 
 
 def eat_apple(apple): 
-    if ((apple.ycor() <= head.ycor()+ 10 and apple.ycor() >= head.ycor()- 10 ) and (apple.xcor() <= head.xcor()+ 10 and apple.xcor() >= head.xcor()- 10 )):
+    if (head.distance(apple) < 20):
         draw_apple()
     
 draw_apple()
@@ -107,14 +103,25 @@ def gameplay():
         eat_apple(apple)
         window.update()
         global up, down, left, right
-        if up == True:
-            head.sety(head.ycor() + 3)
-        if down == True:
-            head.sety(head.ycor() - 3)
-        if left == True:
-            head.setx(head.xcor() - 3)
-        if right == True:
-            head.setx(head.xcor() + 3)
+        if head.direction == 'up':
+            head.sety(head.ycor() + 20)
+        if head.direction == 'down':
+            head.sety(head.ycor() - 20)
+        if head.direction == 'left':
+            head.setx(head.xcor() - 20)
+        if head.direction == 'right':
+            head.setx(head.xcor() + 20)
+        # move end segment of snake body 
+        for index in range(len(snake_body) - 1,0,-1):
+            x = snake_body[index - 1].xcor()
+            y = snake_body[index - 1].ycor()
+            snake_body[index].goto(x,y)
+        if len(snake_body) > 0:
+            x = head.xcor
+            y = head.ycor
+            print(type(x))
+            snake_body[0].goto(x,y)
+
 
 gameplay()
 turtle.done()
